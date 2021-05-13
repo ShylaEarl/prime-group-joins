@@ -28,7 +28,10 @@ ON warehouse_product.product_id = products.id
 WHERE products.description = 'diet pepsi';
 
 -- 5. Get the number of orders for each customer. NOTE: It is OK if those without orders are not included in results.
-
+SELECT customers.first_name, customers.last_name, COUNT(orders.address_id)
+FROM customers JOIN addresses ON customers.id = addresses.customer_id
+JOIN orders ON addresses.id = orders.id GROUP BY customers.first_name, customers.last_name
+ORDER BY customers.first_name;
 -- 6. How many customers do we have? 
 4
 SELECT COUNT(customers.id) FROM customers;
@@ -39,6 +42,9 @@ SELECT COUNT(products.id) FROM products;
 
 -- 8. What is the total available on-hand quantity of diet pepsi?
 92
+SELECT products.description, SUM(warehouse_product.on_hand)
+FROM products JOIN warehouse_product ON products.id = warehouse_product.product_id
+WHERE products.description = 'diet pepsi' GROUP BY products.description;
 
 -- Stretch
 -- 9. How much was the total cost for each order?
